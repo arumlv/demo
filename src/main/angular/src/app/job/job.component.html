@@ -1,0 +1,37 @@
+<mat-card class="card">
+    <mat-card-header>
+        <mat-card-title>{{ name }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="row">
+            <div class="col">
+                startTime
+            </div>
+            <div class="col">
+                {{ job?.startTime | date:'yyyy-MM-dd HH:mm:ss' }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                endTime
+            </div>
+            <div class="col">
+                {{ job?.endTime | date:'yyyy-MM-dd HH:mm:ss' }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                status
+            </div>
+            <div class="col">
+                {{ job?.status }}
+            </div>
+        </div>
+        <mat-spinner *ngIf="job?.status === 'STARTED'"></mat-spinner>
+        <span *ngIf="job?.status === 'STARTED'">write: {{job?.writeCount}}</span>
+
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-stroked-button color="primary" *ngIf="job?.status !== 'STARTED'" (click)="startJob()">Start</button>
+    </mat-card-actions>
+</mat-card>

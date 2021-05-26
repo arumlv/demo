@@ -1,0 +1,21 @@
+.sidenav-container {
+    height: 100%;
+}
+
+.sidenav {
+    width: 220px;
+}
+
+th, td {
+    min-width: 150px;
+}
+
+.beneficials {
+    min-width: 150px;
+    background-color: #D4E6F1;
+}
+
+mat-paginator {
+    display: flex;
+    justify-content: left;
+}

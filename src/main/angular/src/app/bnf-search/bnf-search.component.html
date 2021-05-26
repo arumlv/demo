@@ -1,0 +1,93 @@
+<mat-drawer-container class="sidenav-container">
+    <mat-drawer role="navigation" class="sidenav" mode="side" opened="true">
+        <form [formGroup]="searchForm" novalidate (ngSubmit)="onSubmit()" autocomplete="off">
+            <mat-card class="shipping-card">
+                <mat-card-content>
+                    <div class="row">
+                        <div class="col">
+                            <mat-form-field>
+                                <input matInput placeholder="LE Registration Nr" formControlName="regCode">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <mat-form-field>
+                                <input matInput placeholder="Beneficial Name" formControlName="foreName">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <mat-form-field>
+                                <input matInput placeholder="Beneficial Surname" formControlName="surName">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <mat-form-field>
+                                <input matInput [matDatepicker]="picker" formControlName="birthDate"
+                                    placeholder="Beneficial Birth date">
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-raised-button color="primary" type="submit">Submit</button>
+                </mat-card-actions>
+            </mat-card>
+        </form>
+    </mat-drawer>
+    <mat-drawer-content>
+        <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+        <table mat-table [dataSource]="data" *ngIf="!isLoadingResults" multiTemplateDataRows>
+            <ng-container matColumnDef="typeText">
+                <th mat-header-cell *matHeaderCellDef>Reg. Type</th>
+                <td mat-cell *matCellDef="let row"> {{row.typeText}} </td>
+            </ng-container>
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>LegalEntity Name</th>
+                <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+            </ng-container>
+            <ng-container matColumnDef="regCode">
+                <th mat-header-cell *matHeaderCellDef>Reg Code</th>
+                <td mat-cell *matCellDef="let row"> {{row.regCode}} </td>
+            </ng-container>
+            <ng-container matColumnDef="address">
+                <th mat-header-cell *matHeaderCellDef>Address</th>
+                <td mat-cell *matCellDef="let row"> {{row.address}} </td>
+            </ng-container>
+            <ng-container matColumnDef="registered">
+                <th mat-header-cell *matHeaderCellDef>registered</th>
+                <td mat-cell *matCellDef="let row"> {{row.registered | date:'yyyy-MM-dd'}} </td>
+            </ng-container>
+            <ng-container matColumnDef="terminated">
+                <th mat-header-cell *matHeaderCellDef>terminated</th>
+                <td mat-cell *matCellDef="let row"> {{row.terminated | date:'yyyy-MM-dd'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="expandedDetail">
+                <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                    <table mat-table [dataSource]="element.beneficials">
+                        <ng-container matColumnDef="{{innerColumn}}" *ngFor="let innerColumn of innerDisplayedColumns">
+                            <th mat-header-cell *matHeaderCellDef> {{innerColumn}} </th>
+                            <td mat-cell *matCellDef="let element"> {{element[innerColumn]}} </td>
+                        </ng-container>
+                        <tr class="beneficials" mat-row *matRowDef="let row; columns: innerDisplayedColumns;"></tr>
+                    </table>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['expandedDetail']"></tr>
+        </table>
+        <mat-paginator [length]="page?.totalPages" [pageSize]="5" [showFirstLastButtons]="true"
+            (page)="pageEvent($event)">
+        </mat-paginator>
+
+    </mat-drawer-content>
+</mat-drawer-container>
